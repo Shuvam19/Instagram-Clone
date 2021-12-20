@@ -8,15 +8,16 @@
       />
       <p class="user-name">username</p>
     </div>
-    <v-icon class="dots-horizontal">{{ dotsHorizontal }} </v-icon>
+    <v-icon class="dots-horizontal">{{ dotsHorizontal }}</v-icon>
   </div>
 </template>
 
 <script>
-import { mdiDotsHorizontal } from '@mdi/js'
+import {mdiDotsHorizontal} from '@mdi/js'
 import CircularImage from '~/components/utils/CircularImage.vue'
+
 export default {
-  components: { CircularImage },
+  components: {CircularImage},
   data() {
     return {
       dotsHorizontal: mdiDotsHorizontal,
@@ -25,7 +26,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .user-details {
   height: 60px;
   display: flex;

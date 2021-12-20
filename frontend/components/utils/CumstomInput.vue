@@ -3,19 +3,33 @@
     :type="type"
     :name="name"
     class="user-input"
-    @input="$emit('update:modelValue', $event.target.value)"
     :placeholder="placeholder"
+    :value="modelValue"
+    @input="$emit('input', $event.target.value)"
   />
 </template>
 
 <script>
 export default {
   props: {
-    type: String,
-    name: String,
-    placeholder: String,
-    modelValue: String,
+    type: {
+      type: String,
+      default: 'text',
+    },
+    name: {
+      type : String,
+      default: 'default',
+    },
+    placeholder: {
+      type: String,
+      default: 'Enter Anything',
+    },
+    modelValue: {
+      type : String,
+      default: '',
+    },
   },
+  // props : ['type','name','placeholder','modelValue']
 }
 </script>
 

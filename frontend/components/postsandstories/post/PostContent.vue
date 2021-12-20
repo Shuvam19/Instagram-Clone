@@ -1,18 +1,29 @@
 <template>
   <div class="post-content">
-      <img :src="'https://picsum.photos/614'" alt="Image Not available">
+    <img class="image-content" :src="imgUrl" alt="Image Not available">
   </div>
 </template>
 
 <script>
 export default {
-
+  props: {
+    imgUrl: {
+      type: String,
+      default: "",
+    }
+  }
 }
 </script>
 
-<style>
+<style scoped>
 .post-content {
-    width: 614px;
-    height: 614px;
+  width: 614px;
+  height: 614px;
+}
+
+.image-content {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 </style>
