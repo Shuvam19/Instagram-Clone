@@ -6,13 +6,13 @@
     <form class="login-form" @submit.prevent="userLogin">
       <div class="login-input">
         <cumstom-input
-          v-model="login.username"
+          v-model="username"
           type="text"
           name="username"
           placeholder="User Name"
         />
         <cumstom-input
-          v-model="login.password"
+          v-model="password"
           type="password"
           name="password"
           placeholder="Password"
@@ -35,20 +35,21 @@ export default {
   },
   data() {
     return {
-      login: {
-        username: '',
-        password: '',
-      },
+      username: '',
+      password: '',
     }
   },
   methods: {
-    userLogin() {
-      // const response = await this.$axios.post(
-      //   'http://localhost:8080/auth/login',
-      //   this.login
-      // )
-      // console.log(response.json())
-      console.log(this.login)
+    async userLogin() {
+      try {
+        await this.$auth.loginWith('local', {
+          data: {
+            username: this.username,
+            password: this.password,
+          },
+        })
+      } catch (err) {
+      }
     },
   },
 }
@@ -59,7 +60,7 @@ export default {
   width: 350px;
   margin: auto;
   padding: 80px 40px;
-  vertical-align: centre;
+  vertical-align: center;
   /* height: 350px; */
   background-color: #fff;
   border: 1px solid rgb(219, 219, 219);

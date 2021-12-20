@@ -1,21 +1,27 @@
 <template>
   <div class="post-and-stories">
-    <Stories class="stories" />
-    <Posts class="posts" />
+    <!--    <Stories class="stories" />-->
+    <Posts/>
   </div>
 </template>
 
 <script>
 import Posts from './Posts.vue'
-import Stories from './Stories.vue'
+// import Stories from './Stories.vue'
 export default {
-  components: { Posts, Stories },
+  components: {
+    Posts,
+    // Stories
+  },
 }
 </script>
 
-<style>
+<style scoped>
+
+
 .post-and-stories {
   height: fit-content;
+  width: 614px;
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -25,7 +31,7 @@ export default {
   width: 100%;
   height: 118px;
   padding: 16px 20px;
-  border: 0.5px solid rgb(219, 219, 219);
+  border: 1px solid rgb(219, 219, 219);
   display: flex;
   box-sizing: border-box;
   flex-direction: row;
@@ -38,13 +44,5 @@ export default {
 
 .stories::-webkit-scrollbar {
   display: none;
-}
-
-.posts {
-  height: fit-content;
-  display: flex;
-  flex-direction: column;
-  border-radius: 3px;
-  gap: 24px;
 }
 </style>

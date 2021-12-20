@@ -1,14 +1,18 @@
 <template>
   <div class="container">
-    <post-and-stories class="left-container" />
+    <post-and-stories />
     <div class="right-container"></div>
   </div>
 </template>
 
 <script>
 import PostAndStories from '~/components/postsandstories/PostAndStories.vue'
+
 export default {
-  components: { PostAndStories },
+  components: {PostAndStories},
+  mounted() {
+    this.$store.dispatch('addPostContent');
+  },
 }
 </script>
 
@@ -16,15 +20,10 @@ export default {
 .container {
   max-width: 935px;
   height: auto;
-  margin: auto;
-  margin-top: 30px;
+  margin: 30px auto auto;
   display: flex;
   flex-direction: row;
   gap: 28px;
-}
-
-.left-container {
-  width: 614px;
 }
 
 .right-container {
@@ -37,6 +36,7 @@ export default {
   .container {
     max-width: 90vw;
   }
+
   .left-container {
     width: 100%;
   }
@@ -46,6 +46,7 @@ export default {
   .container {
     justify-content: center;
   }
+
   .right-container {
     display: none;
   }

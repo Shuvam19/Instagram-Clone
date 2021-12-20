@@ -15,7 +15,7 @@
 
     </div>
     <div class="comment">
-      
+
     </div>
   </div>
 </template>
@@ -27,6 +27,7 @@ import {
   mdiMessageReplyOutline,
   mdiSendOutline,
 } from '@mdi/js'
+
 export default {
   data() {
     return {
@@ -39,7 +40,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .like-share-save {
   display: flex;
   justify-content: space-between;
@@ -54,5 +55,9 @@ export default {
 
 .sendOutline {
   transform: rotate(-50deg) translateX(5px) translateY(1px) !important;
+}
+
+.likes-comments {
+  padding: 0 10px;
 }
 </style>

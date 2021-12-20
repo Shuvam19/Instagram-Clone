@@ -1,4 +1,4 @@
-package com.example.instagrambackend.model;
+package com.example.instagrambackend.model.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,9 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SignUpRequest {
+public class LoginRequest {
     private String username;
     private String password;
-    private String fullName;
-    private String emailOrPhone;
 }
