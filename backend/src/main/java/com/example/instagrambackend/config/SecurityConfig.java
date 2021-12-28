@@ -1,7 +1,7 @@
 package com.example.instagrambackend.config;
 
 
-import com.example.instagrambackend.filters.JWTFilter;
+import com.example.instagrambackend.filters.JwtPerRequestFilter;
 import com.example.instagrambackend.service.UserDetailServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +15,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @AllArgsConstructor
@@ -22,7 +24,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     UserDetailServiceImpl userDetailServiceImpl;
-    JWTFilter JWTFilter;
+    JwtPerRequestFilter JwtPerRequestFilter;
+    AuthenticationEntryPoint authenticationEntryPoint;
+    AccessDeniedHandler accessDeniedHandler;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) {
@@ -43,8 +47,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .antMatchers("/auth/**").permitAll()
-                .anyRequest().authenticated().and().formLogin();
-        http.addFilterBefore(JWTFilter, UsernamePasswordAuthenticationFilter.class);
+                .anyRequest().authenticated().and().formLogin()
+                .and().exceptionHandling()
+                .authenticationEntryPoint(authenticationEntryPoint)
+                .accessDeniedHandler(accessDeniedHandler);
+        http.addFilterBefore(JwtPerRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean
@@ -52,7 +59,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-    @Override @Bean
+    @Override
+    @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }

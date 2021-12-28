@@ -4,7 +4,9 @@ import com.example.instagrambackend.model.entity.Post;
 import com.example.instagrambackend.model.entity.User;
 import com.example.instagrambackend.model.request.CreatePostRequest;
 import com.example.instagrambackend.repository.PostRepository;
+import com.example.instagrambackend.model.exception.GlobalException;
 import com.example.instagrambackend.util.ProfileUtil;
+import com.example.instagrambackend.util.ResponseUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,12 +25,12 @@ public class CreateController {
     private ProfileUtil profileUtil;
 
     @PostMapping("/post")
-    public ResponseEntity<?> postContent(Principal principal, @RequestBody CreatePostRequest createPostRequest) throws Exception {
+    public ResponseEntity<?> postContent(Principal principal, @RequestBody CreatePostRequest createPostRequest) throws GlobalException {
         System.out.println(principal.getName());
         User user = profileUtil.getUserFromUserName(principal.getName());
         Post post = new Post(createPostRequest);
         post.setUser(user);
         repository.save(post);
-        return ResponseEntity.ok("Post Create Successfully");
+        return ResponseUtil.ok("Post Create Successfully");
     }
 }

@@ -4,6 +4,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
+import com.example.instagrambackend.model.exception.GlobalException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,7 +28,7 @@ public class S3StorageService {
     @Value("${amazonProperties.region}")
     private String region;
 
-    public String uploadFile(String userId, MultipartFile multiPartFile) throws Exception {
+    public String uploadFile(String userId, MultipartFile multiPartFile) throws GlobalException {
         try {
             String path = getPathOfUser(userId);
             String fileName = generateFileName(multiPartFile);
@@ -36,7 +37,7 @@ public class S3StorageService {
             convertedFile.delete();
             return createUrl(userId, fileName);
         } catch (IOException e) {
-            throw new Exception("Some Error Occurred");
+            throw new GlobalException("Some Error Occurred While Uploading File");
         }
     }
 

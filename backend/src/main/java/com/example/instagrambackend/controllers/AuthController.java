@@ -8,7 +8,10 @@ import com.example.instagrambackend.model.response.LoginResponse;
 import com.example.instagrambackend.model.response.ProfileResponse;
 import com.example.instagrambackend.model.response.UserResponse;
 import com.example.instagrambackend.repository.UserDetailRepository;
+import com.example.instagrambackend.model.exception.GlobalException;
+import com.example.instagrambackend.model.response.GlobalResponse;
 import com.example.instagrambackend.util.JWTUtil;
+import com.example.instagrambackend.util.ResponseUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -34,36 +37,38 @@ public class AuthController {
     private AuthenticationManager authenticationManager;
 
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest) throws Exception {
+    public ResponseEntity<GlobalResponse> loginUser(@RequestBody LoginRequest loginRequest) throws GlobalException {
         try {
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword());
             authenticationManager.authenticate(usernamePasswordAuthenticationToken);
         } catch (BadCredentialsException exception) {
-            throw new Exception("UserName Or Password Is Incorrect");
+            throw new GlobalException("UserName Or Password Is Incorrect");
         }
         UserDetails userDetails = userDetailsService.loadUserByUsername(loginRequest.getUsername());
         String token = jwtUtil.generateToken(userDetails);
-        return ResponseEntity.ok(new LoginResponse(token));
+        return ResponseUtil.ok(new LoginResponse(token));
     }
 
     @PostMapping("/sign-up")
     public ResponseEntity<?> signUpUser(@RequestBody SignUpRequest signUpRequest) {
 
         if (signUpRequest.getUsername() == null) {
-            throw new Error("Please Enter Username");
+            throw new GlobalException("Please Enter Username");
         }
 
         // Check UserName Exists
         if (userDetailRepository.findByUsername(signUpRequest.getUsername()).isPresent()) {
-            throw new Error("Username Already Exists");
+            throw new GlobalException("Username Already Exists");
         }
 
-        if (signUpRequest.getEmail() != null && !signUpRequest.getEmail().isEmpty() && userDetailRepository.findByEmail(signUpRequest.getEmail()).isPresent()) {
-            throw new Error("Email Already Exists");
+        if (signUpRequest.getEmail() != null && !signUpRequest.getEmail().isEmpty()
+                && userDetailRepository.findByEmail(signUpRequest.getEmail()).isPresent()) {
+            throw new GlobalException("Email Already Exists");
         }
 
-        if (signUpRequest.getMobileNo() != null && !signUpRequest.getMobileNo().equals("0") && userDetailRepository.findByMobileNo(signUpRequest.getMobileNo()).isPresent()) {
-            throw new Error("MobileNo Already Exists");
+        if (signUpRequest.getMobileNo() != null && !signUpRequest.getMobileNo().equals("0")
+                && userDetailRepository.findByMobileNo(signUpRequest.getMobileNo()).isPresent()) {
+            throw new GlobalException("MobileNo Already Exists");
         }
 
         // Encode A Password
@@ -86,20 +91,20 @@ public class AuthController {
 
         String token = jwtUtil.generateToken(userDetails);
 
-        return ResponseEntity.ok(new LoginResponse(token));
+        return ResponseUtil.ok(new LoginResponse(token));
     }
 
     @PostMapping("/user")
     public ResponseEntity<?> getUser(Principal principal) throws Exception {
         Optional<User> userOptional = userDetailRepository.findByUsername(principal.getName());
-        if (userOptional.isEmpty()) throw new Exception("User Not Present");
-        return ResponseEntity.ok(new UserResponse(
+        if (userOptional.isEmpty()) throw new GlobalException("User Not Present");
+        return ResponseUtil.ok(new UserResponse(
                 new ProfileResponse(userOptional.get())
         ));
     }
 
     @GetMapping("/isValidUsername")
     public ResponseEntity<?> isUserNameValid(@RequestParam("username") String username) {
-        return ResponseEntity.ok(userDetailRepository.existsByUsernameNot(username));
+        return ResponseUtil.ok(userDetailRepository.existsByUsernameNot(username));
     }
 }
